@@ -1,6 +1,6 @@
 # Unicode与中文互转工具 ![GitHub](https://img.shields.io/github/license/chenqicong528/unicode-chinese-converter)
 
-![项目截图](https://via.placeholder.com/800x400?text=Unicode+Converter+Demo) <!-- 替换为实际截图 -->
+![项目截图]([https://via.placeholder.com/800x400?text=Unicode+Converter+Demo](https://raw.githubusercontent.com/chenqicong528/Unicode/refs/heads/main/test.png)) 
 
 > 轻松实现Unicode编码与中文字符之间的相互转换
 
