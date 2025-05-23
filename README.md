@@ -13,12 +13,6 @@
 ## 🚀 快速使用
 ### 在线体验
 访问 [Demo页面](https://unicode.tkkkk.tk) <!-- 替换为实际URL -->
-
-
-🛠️ 技术栈
-前端框架：纯HTML/CSS/JavaScript
-UI库：TailwindCSS + Font Awesome
-兼容性：现代浏览器（Chrome/Firefox/Edge）
 📖 使用指南
 中文转Unicode
 在左侧输入框输入中文字符
