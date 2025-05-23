@@ -1,4 +1,4 @@
-# Unicode与中文互转工具 ![GitHub](https://img.shields.io/github/license/chenqicong528/unicode)
+# Unicode与中文互转工具
 
 ![项目截图](https://raw.githubusercontent.com/chenqicong528/Unicode/refs/heads/main/test.png)
 
