@@ -12,13 +12,9 @@
 
 ## 🚀 快速使用
 ### 在线体验
-访问 [Demo页面](https://your-demo-url.com) <!-- 替换为实际URL -->
+访问 [Demo页面](https://unicode.tkkkk.tk) <!-- 替换为实际URL -->
 
-### 本地运行
-```bash
-git clone https://github.com/chenqicong528/unicode-chinese-converter.git
-cd unicode-chinese-converter
-open index.html
+
 🛠️ 技术栈
 前端框架：纯HTML/CSS/JavaScript
 UI库：TailwindCSS + Font Awesome
@@ -33,9 +29,4 @@ Unicode转中文
 点击"转换为中文"按钮
 结果将显示为对应中文字符
 🤝 贡献指南
-欢迎通过Issues提交建议或PR！贡献前请阅读：
-
-Fork仓库并创建分支
-提交清晰的commit信息
-确保代码风格一致
-更新相关文档
+欢迎通过Issues提交建议或PR！
