@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unicode与中文互转工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
+        }
+        .text-gradient {
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        textarea {
+            resize: none;
+        }
+        .copy-btn {
+            transition: all 0.3s ease;
+        }
+        .copy-btn:hover {
+            transform: scale(1.1);
+        }
+        .copy-btn.copied {
+            background-color: #10b981 !important;
+        }
+        .glow {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 5px rgba(99, 102, 241, 0.5);
+            }
+            to {
+                box-shadow: 0 0 20px rgba(99, 102, 241, 0.8);
+            }
+        }
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+    <div class="gradient-bg text-white py-6 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold flex items-center">
+                        <i class="fas fa-language mr-3 text-yellow-300"></i>
+                        <span class="text-gradient">Unicode与中文互转工具</span>
+                    </h1>
+                    <p class="mt-2 opacity-90">轻松实现Unicode编码与中文字符之间的相互转换</p>
+                </div>
+                <div class="hidden md:block">
+                    <div class="flex space-x-2">
+                        <span class="px-3 py-1 bg-white bg-opacity-20 rounded-full text-sm glow">在线工具</span>
+                        <span class="px-3 py-1 bg-white bg-opacity-20 rounded-full text-sm glow">编码转换</span>
+                        <span class="px-3 py-1 bg-white bg-opacity-20 rounded-full text-sm glow">开发者</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 card-hover border-2 border-blue-200 hover:border-blue-400">
+                <div class="bg-blue-600 px-6 py-4">
+                    <h2 class="text-xl font-semibold text-white flex items-center">
+                        <i class="fas fa-chinese-yuan-sign mr-2 text-yellow-300"></i>
+                        中文 → Unicode
+                    </h2>
+                </div>
+                <div class="p-6">
+                    <div class="mb-4">
+                        <label for="chineseInput" class="block text-gray-700 font-medium mb-2">输入中文字符</label>
+                        <textarea id="chineseInput" rows="4" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" placeholder="请输入要转换的中文字符..."></textarea>
+                    </div>
+                    <button onclick="convertToUnicode()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-all flex items-center justify-center glow">
+                        <i class="fas fa-arrow-down mr-2 pulse"></i> 转换为Unicode
+                    </button>
+                    <div class="mt-6">
+                        <label for="unicodeOutput" class="block text-gray-700 font-medium mb-2">Unicode编码结果</label>
+                        <div class="relative">
+                            <textarea id="unicodeOutput" rows="4" readonly class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg bg-gray-50"></textarea>
+                            <button onclick="copyToClipboard('unicodeOutput')" class="absolute right-2 bottom-2 bg-gray-200 hover:bg-gray-300 text-gray-800 py-1 px-3 rounded copy-btn" title="复制到剪贴板">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 card-hover border-2 border-green-200 hover:border-green-400">
+                <div class="bg-green-600 px-6 py-4">
+                    <h2 class="text-xl font-semibold text-white flex items-center">
+                        <i class="fas fa-code mr-2 text-yellow-300"></i>
+                        Unicode → 中文
+                    </h2>
+                </div>
+                <div class="p-6">
+                    <div class="mb-4">
+                        <label for="unicodeInput" class="block text-gray-700 font-medium mb-2">输入Unicode编码</label>
+                        <textarea id="unicodeInput" rows="4" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all" placeholder="请输入Unicode编码（如\u4f60\u597d 或 你好）..."></textarea>
+                    </div>
+                    <button onclick="convertToChinese()" class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-lg transition-all flex items-center justify-center glow">
+                        <i class="fas fa-arrow-down mr-2 pulse"></i> 转换为中文
+                    </button>
+                    <div class="mt-6">
+                        <label for="chineseOutput" class="block text-gray-700 font-medium mb-2">中文字符结果</label>
+                        <div class="relative">
+                            <textarea id="chineseOutput" rows="4" readonly class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg bg-gray-50"></textarea>
+                            <button onclick="copyToClipboard('chineseOutput')" class="absolute right-2 bottom-2 bg-gray-200 hover:bg-gray-300 text-gray-800 py-1 px-3 rounded copy-btn" title="复制到剪贴板">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-12 bg-white rounded-xl shadow-md overflow-hidden p-6 border-2 border-blue-100">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-question-circle text-blue-600 mr-3"></i>
+                如何使用这个工具？
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-2 flex items-center">
+                        <i class="fas fa-arrow-right text-blue-500 mr-2"></i>
+                        中文转Unicode
+                    </h3>
+                    <ol class="list-decimal list-inside text-gray-600 space-y-2">
+                        <li>在左侧"输入中文字符"框中输入或粘贴中文字符</li>
+                        <li>点击"转换为Unicode"按钮</li>
+                        <li>转换结果将显示在下方的输出框中</li>
+                        <li>点击复制按钮将结果复制到剪贴板</li>
+                    </ol>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-2 flex items-center">
+                        <i class="fas fa-arrow-left text-green-500 mr-2"></i>
+                        Unicode转中文
+                    </h3>
+                    <ol class="list-decimal list-inside text-gray-600 space-y-2">
+                        <li>在右侧"输入Unicode编码"框中输入或粘贴Unicode编码</li>
+                        <li>点击"转换为中文"按钮</li>
+                        <li>转换结果将显示在下方的输出框中</li>
+                        <li>点击复制按钮将结果复制到剪贴板</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 bg-blue-50 rounded-xl p-6 border-2 border-blue-200">
+            <h2 class="text-xl font-bold text-blue-800 mb-4 flex items-center">
+                <i class="fas fa-lightbulb text-yellow-500 mr-3"></i>
+                示例
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-blue-100">
+                    <h3 class="font-medium text-blue-700 mb-2">中文 → Unicode</h3>
+                    <p class="text-gray-600 mb-1"><span class="font-semibold">输入:</span> 你好世界</p>
+                    <p class="text-gray-600"><span class="font-semibold">输出:</span> \u4f60\u597d\u4e16\u754c</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-green-100">
+                    <h3 class="font-medium text-green-700 mb-2">Unicode → 中文</h3>
+                    <p class="text-gray-600 mb-1"><span class="font-semibold">输入:</span> \u4e2d\u6587\u8f6c\u6362</p>
+                    <p class="text-gray-600"><span class="font-semibold">输出:</span> 中文转换</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-xl font-bold flex items-center">
+                        <i class="fas fa-language mr-2 text-yellow-300"></i>
+                        Unicode与中文互转工具
+                    </h3>
+                    <p class="text-gray-400 mt-1">为开发者提供的便捷编码转换工具</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="https://github.com/chenqicong528" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fab fa-github text-2xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-6 pt-6 text-center text-gray-400 text-sm">
+                <p>© 2017-2025 <a href="https://tkkkk.tk" class="hover:text-yellow-300">柒葱</a> All Rights Reserved</p>
+                <p class="mt-2">闽ICP备12014597号-5 | 粤网安备44120202000532 | 萌ICP备20210528号</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function convertToUnicode() {
+            const chineseText = document.getElementById('chineseInput').value;
+            let result = '';
+            
+            for (let i = 0; i < chineseText.length; i++) {
+                const charCode = chineseText.charCodeAt(i);
+                if (charCode > 127) {
+                    result += '\\u' + charCode.toString(16).padStart(4, '0');
+                } else {
+                    result += chineseText[i];
+                }
+            }
+            
+            document.getElementById('unicodeOutput').value = result;
+        }
+
+        function convertToChinese() {
+            const unicodeText = document.getElementById('unicodeInput').value;
+            let result = '';
+            
+            result = unicodeText.replace(/\\u([\dA-Fa-f]{4})/g, (match, grp) => {
+                return String.fromCharCode(parseInt(grp, 16));
+            });
+            
+            document.getElementById('chineseOutput').value = result;
+        }
+
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            element.select();
+            document.execCommand('copy');
+            
+            const copyBtn = event.currentTarget;
+            copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+            copyBtn.classList.add('copied');
+            
+            setTimeout(() => {
+                copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+                copyBtn.classList.remove('copied');
+            }, 2000);
+        }
+
+        document.getElementById('chineseInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.shiftKey) {
+                convertToUnicode();
+            }
+        });
+
+        document.getElementById('unicodeInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.shiftKey) {
+                convertToChinese();
+            }
+        });
+    </script>
+</body>
+</html>
